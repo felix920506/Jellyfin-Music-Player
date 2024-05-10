@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "jellyfin-music-player"
+version = "0.0.1"
+description = ""
+authors = ["felix920506 <felix920506@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+nicegui = "^1.4.24"
+aiohttp = "^3.9.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
