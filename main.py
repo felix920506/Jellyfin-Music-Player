@@ -1,6 +1,6 @@
 from nicegui import ui
 import login
-import index
+import app
 
 
 @ui.page('/')

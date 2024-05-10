@@ -6,7 +6,7 @@ from internationalization import translate
 @ui.page('/login')
 async def loginPage():
     if sessioncontroller.hasToken():
-        ui.navigate.to('/index')
+        ui.navigate.to('/app')
 
     else:
         ui.label(translate('loginHeader'))
