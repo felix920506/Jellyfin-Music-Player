@@ -1,0 +1,9 @@
+zh_tw:
+  loginErrorWrongLogin: "錯誤的帳號或密碼"
+  loginErrorInvalidUrl: "無法在此網址連線至伺服器"
+  loginErrorUnknown: "發生了未知的錯誤"
+  loginHeader: "登入你的 Jellyfin 伺服器"
+  loginServerIP: "伺服器 IP"
+  loginUsername: "使用者帳號"
+  loginPassword: "密碼"
+  loginLoginButton: "登入"

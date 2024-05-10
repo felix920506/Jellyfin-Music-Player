@@ -1,0 +1,9 @@
+en_us:
+  loginErrorWrongLogin: "Incorrect Username or Password."
+  loginErrorInvalidUrl: "A server cannot be reached at the specified URL."
+  loginErrorUnknown: "An unknown error occurred."
+  loginHeader: "Login To your Jellyfin Server"
+  loginServerIP: "Server IP"
+  loginUsername: "Username"
+  loginPassword: "Password"
+  loginLoginButton: "Login"
