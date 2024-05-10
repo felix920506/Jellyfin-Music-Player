@@ -2,5 +2,5 @@ from nicegui import ui
 
 
 @ui.page('/index')
-def indexpage():
+def indexPage():
     ui.label("Placeholder")

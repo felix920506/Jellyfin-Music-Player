@@ -8,30 +8,38 @@ VERSION = '0.0.1'
 CLIENT = 'Jellyfin Music Player'
 CLIENTID = '12345'
 
+# Use device name as Jellyfin device name
 DEVICE = platform.node()
 
-
+# Load authentication info from previous session(s)
 try:
     with open('./data/auth.json', 'r', encoding='utf8') as authFile:
         auth = json.load(authFile)
-        _serverIp = auth['serverIp']
-        _token = auth['token']
 
 except:
-    _serverIp: str = ''
+    # Load file failed: blank token and IP, start over
+    serverIp: str = ''
     _token: str = ''
 
+else:
+    # Use the items present to authenticate
+    if 'serverIp' in auth:
+        serverIp = auth['serverIp']
 
-async def login(server: str, username: str, password: str):
-    async with aiohttp.ClientSession(headers=_buildheader()) as session:
+    if 'token' in auth:
+        _token = auth['token']
+
+
+async def loginUsername(server: str, username: str, password: str):
+    async with aiohttp.ClientSession(headers=_buildHeader()) as session:
         body = {
             'Username': username,
             'Pw': password
         }
         try:
             async with session.post(f'{server}/Users/AuthenticateByName', json=body) as auth:
-                global _serverIp
-                _serverIp = server
+                global serverIp
+                serverIp = server
                 if auth.status == 200:
                     body = json.loads(await auth.text())
                     global _token
@@ -51,11 +59,11 @@ async def login(server: str, username: str, password: str):
             return "InvalidUrl"
 
 
-async def loginquickconnect( server, code):
+async def loginQuickConnect(server: str, code: str):
     pass
 
 
-def _buildheader():
+def _buildHeader():
     headers = {
         "Authorization": f'MediaBrowser Client="{CLIENT}", Device="{DEVICE}", DeviceId="{CLIENTID}", Version="{VERSION}"'
     }
