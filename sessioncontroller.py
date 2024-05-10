@@ -78,3 +78,8 @@ def hasToken():
         return True
     else:
         return False
+
+
+def invalidateToken():
+    global _token
+    _token = ''
