@@ -45,12 +45,20 @@ class Router:
         return decorator
 
     def open(self, target: Union[Callable, str]) -> None:
-        if isinstance(target, str):
+        if target in self.routes:
+            if isinstance(target, str):
+                path = target
+                builder = self.routes[target]
+            else:
+                path = {v: k for k, v in self.routes.items()}[target]
+                builder = target
+        elif target.startswith('/app/libs/'):
             path = target
-            builder = self.routes[target]
-        else:
-            path = {v: k for k, v in self.routes.items()}[target]
-            builder = target
+            builder = self.routes['/app/libs/']
+
+        elif target.startswith('/app/albums'):
+            path = target
+            builder = self.routes['/app/albums/']
 
         # noinspection PyAsyncCall
         async def build() -> None:

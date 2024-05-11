@@ -1,6 +1,9 @@
 import aiohttp
 import platform
 import json
+from nicegui import ui
+from internationalization import translate
+from typing import Literal
 
 
 # TODO: Refactor to read from external file
@@ -31,7 +34,8 @@ else:
 
 
 async def loginUsername(server: str, username: str, password: str):
-    async with aiohttp.ClientSession(headers=_buildHeader()) as session:
+    server.strip('/')
+    async with aiohttp.ClientSession(headers=buildHeader()) as session:
         body = {
             'Username': username,
             'Pw': password
@@ -63,7 +67,7 @@ async def loginQuickConnect(server: str, code: str):
     pass
 
 
-def _buildHeader():
+def buildHeader():
     headers = {
         "Authorization": f'MediaBrowser Client="{CLIENT}", Device="{DEVICE}", DeviceId="{CLIENTID}", Version="{VERSION}"'
     }
@@ -83,3 +87,31 @@ def hasToken():
 def invalidateToken():
     global _token
     _token = ''
+    ui.notify(translate('SessionInvalidMessage'))
+    ui.navigate.to('/login')
+
+
+async def requestMaker(reqtype: Literal["GET", "POST"], endpoint: str, params: str = None, payload: dict = None):
+    async with aiohttp.ClientSession(headers=buildHeader()) as session:
+        url = f'{serverIp}/{endpoint}'
+        if params:
+            url = f'{url}?{params}'
+
+        try:
+            match reqtype:
+                case 'GET':
+                    resp = await session.get(url, json=payload)
+
+                case 'POST':
+                    resp = await session.post(url, json=payload)
+
+            if resp.status == 200:
+                res = await resp.json()
+                return res
+            elif resp.status == 401:
+                invalidateToken()
+            else:
+                ui.notify(translate('GeneralErrorUnknown'))
+
+        except:
+            ui.notify(translate('ConnectionErrorMessage'))

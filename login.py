@@ -35,6 +35,6 @@ class LoginHelper:
             case 'InvalidUrl':
                 ui.notify(translate('loginErrorInvalidUrl'))
             case _:
-                ui.notify(translate('loginErrorUnknown'))
+                ui.notify(translate('GeneralErrorUnknown'))
 
 
