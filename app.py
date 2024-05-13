@@ -15,7 +15,7 @@ def appPage():
         libs = await mediacontroller.getLibs()
         print(libs)
         for lib in libs:
-            with ui.card().tight().on('click', lambda libId = lib["Id"]: ui.navigate.to(f'/app/libs/{libId}')):
+            with ui.card().on('click', lambda libId = lib["Id"]: ui.navigate.to(f'/app/libs/{libId}')):
                 ui.image(lib['Image'])
                 ui.label(lib['Name'])
 
@@ -28,13 +28,13 @@ def appPage():
             page = int(url[6])
         except IndexError:
             page = 1
-        libInfoReq = mediacontroller.getLibDetails(libId)
+        libInfoReq = mediacontroller.getItemDetails(libId)
         libAlbumsReq = mediacontroller.getLibItems(libId)
         libInfo = await libInfoReq
         libAlbums = await libAlbumsReq
         ui.label(libInfo['Name'])
         for item in libAlbums:
-            with ui.card().on('click', lambda: ui.navigate.to(f'/app/albums/{item["Id"]}')):
+            with ui.card().on('click', lambda albumId = item['Id']: ui.navigate.to(f'/app/albums/{albumId}')):
                 ui.image(mediacontroller.getImageUrl(item['Id']))
                 ui.label(item['Name'])
         pass
@@ -45,9 +45,19 @@ def appPage():
         url = await ui.run_javascript('window.location.href')
         url = url.split('/')
         albumId = url[5]
-        ui.label(albumId)
-        tracks = await mediacontroller.getAlbumTracks(albumId)
-        print(tracks)
+        tracksreq = mediacontroller.getAlbumTracks(albumId)
+        albumreq = mediacontroller.getItemDetails(albumId)
+        albuminfo = await albumreq
+        ui.image(mediacontroller.getImageUrl(albuminfo['Id']))
+        ui.label(albuminfo['Name'])
+
+        tracks = await tracksreq
+        for track in tracks['Items']:
+            with ui.card():
+                # ui.image(mediacontroller.getImageUrl(track['Id']))
+                ui.label(track['Name'])
+                ui.label(track['Artists'][0])
+                ui.button('Play')
 
     # Places router contents on the page
     router.frame()

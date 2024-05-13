@@ -17,7 +17,7 @@ async def getLibs():
     return reslist
 
 
-async def getLibDetails(id: str) -> dict:
+async def getItemDetails(id: str) -> dict:
     res = await requestMaker('GET', f'Items/{id}')
     return res
 

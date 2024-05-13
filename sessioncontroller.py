@@ -4,6 +4,7 @@ import json
 from nicegui import ui
 from internationalization import translate
 from typing import Literal
+import aiohttp_client_cache
 
 
 # TODO: Refactor to read from external file
@@ -92,7 +93,7 @@ def invalidateToken():
 
 
 async def requestMaker(reqtype: Literal["GET", "POST"], endpoint: str, params: str = None, payload: dict = None):
-    async with aiohttp.ClientSession(headers=buildHeader()) as session:
+    async with aiohttp_client_cache.CachedSession(headers=buildHeader()) as session:
         url = f'{serverIp}/{endpoint}'
         if params:
             url = f'{url}?{params}'
